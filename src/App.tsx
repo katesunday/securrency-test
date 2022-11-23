@@ -1,44 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Web3 from 'web3';
-import { SECURRENCY_SC_ADDRESS } from './address';
-import Citizens from './components/CitizensList/Citizens';
-import { Route, Routes } from 'react-router-dom';
-import { Navigate } from 'react-router-dom';
-import { workersAPI } from './api/workers-api';
-
-const contractABI = require('./contract-abi.json');
+import React, { useEffect } from 'react'
+import './App.css'
+import Citizens from './components/CitizensList/Citizens'
+import { Route, Routes } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
+import { useAppDispatch } from './store/store'
+import { fetchCitizens } from './reducers/CitizensReducer'
 
 function App() {
-  const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
-  const contract = new web3.eth.Contract(contractABI, SECURRENCY_SC_ADDRESS);
-  console.log(contract);
+  const dispatch = useAppDispatch()
 
-  const loadBlockchainData = async () => {
-    contract.once('Citizen', function (error, event) {
-      console.log(event);
-    });
-    contract.events
-      .Citizen()
-      .on('connected', function (subscriptionId: any) {
-        console.log(subscriptionId);
-      })
-      .on('data', function (event: any) {
-        console.log(event);
-      });
-    await contract.once('Citizen', {}, function (error, event) {
-      console.log(event);
-    });
-  };
-
-  const [account, setAccount] = useState('');
   useEffect(() => {
-    //loadBlockchainData()
-    //
-    workersAPI.getTest()
-        .then((res:any)=>console.log(res))
-        .catch((err:any)=>console.log(err))
-  }, []);
+    dispatch(fetchCitizens())
+  }, [dispatch])
   return (
     <div className="App">
       <Routes>
@@ -49,7 +22,117 @@ function App() {
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
+// const address = '0xA011799d9467D2b33768Fb1a3512f1b468B87E96'
+// const abi = [
+//   {
+//     inputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'constructor',
+//   },
+//   {
+//     anonymous: false,
+//     inputs: [
+//       {
+//         indexed: true,
+//         internalType: 'uint256',
+//         name: 'id',
+//         type: 'uint256',
+//       },
+//       {
+//         indexed: true,
+//         internalType: 'uint256',
+//         name: 'age',
+//         type: 'uint256',
+//       },
+//       {
+//         indexed: true,
+//         internalType: 'string',
+//         name: 'city',
+//         type: 'string',
+//       },
+//       {
+//         indexed: false,
+//         internalType: 'string',
+//         name: 'name',
+//         type: 'string',
+//       },
+//     ],
+//     name: 'Citizen',
+//     type: 'event',
+//   },
+//   {
+//     inputs: [
+//       {
+//         internalType: 'uint256',
+//         name: 'age',
+//         type: 'uint256',
+//       },
+//       {
+//         internalType: 'string',
+//         name: 'city',
+//         type: 'string',
+//       },
+//       {
+//         internalType: 'string',
+//         name: 'name',
+//         type: 'string',
+//       },
+//       {
+//         internalType: 'string',
+//         name: 'someNote',
+//         type: 'string',
+//       },
+//     ],
+//     name: 'addCitizen',
+//     outputs: [],
+//     stateMutability: 'nonpayable',
+//     type: 'function',
+//   },
+//   {
+//     inputs: [
+//       {
+//         internalType: 'uint256',
+//         name: 'id',
+//         type: 'uint256',
+//       },
+//     ],
+//     name: 'getNoteByCitizenId',
+//     outputs: [
+//       {
+//         internalType: 'string',
+//         name: '',
+//         type: 'string',
+//       },
+//     ],
+//     stateMutability: 'view',
+//     type: 'function',
+//   },
+// ]
+
+// const web3 = new Web3(Web3.givenProvider || 'http://localhost:8545');
+//
+// const contract = new web3.eth.Contract(abi, address);
+// const cache = [];
+// async function loadData(){
+//   await contract.getPastEvents(
+//       'Citizen',
+//       {
+//         fromBlock: 0,
+//         toBlock: 'latest',
+//       },
+//       function(error,events){
+//         events.map(el=>cache.push(el.returnValues))
+//       }
+//   );
+//   return new Response(cache)
+// };
+//
+// export default{
+//   async fetch(request, env){
+//     return await loadData()
+//   }
+// }
