@@ -1,8 +1,7 @@
 import React from 'react'
 import { FormikHelpers, useFormik } from 'formik'
-import styled from 'styled-components'
-import {useAppDispatch} from "../store/store";
-import {addNewCitizen} from "../reducers/CitizensReducer";
+import { useAppDispatch } from '../store/store'
+import { addNewCitizen } from '../reducers/CitizensReducer'
 
 export type FormikValuesType = {
   age: string
@@ -18,7 +17,7 @@ type FormikErrorType = {
 }
 
 const AddCitizen = () => {
-const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
   const formik = useFormik({
     initialValues: {
@@ -27,7 +26,7 @@ const dispatch = useAppDispatch();
       name: '',
       someNote: '',
     },
-    validate: (values) => {
+    validate: values => {
       const errors: FormikErrorType = {}
       if (!values.age || +values.age < 18) {
         errors.age = 'Required field cannot be empty or less than 18 y.o'
@@ -41,44 +40,17 @@ const dispatch = useAppDispatch();
       if (!values.someNote) {
         errors.someNote = 'Required'
       }
-      return errors;
+      return errors
     },
     onSubmit: async (
       values: FormikValuesType,
       formikHelpers: FormikHelpers<FormikValuesType>
     ) => {
-      const action = await dispatch(addNewCitizen(values))
-      // if(addNewCitizen.rejected.match(action)){
-      //   if(action.payload?.fieldsErrors){
-      //     const error = action.payload.fieldsErrors;
-      //     formikHelpers.setFieldError(error.field, error.error);
-      //   }
-      // }
+      await dispatch(addNewCitizen(values))
       formik.resetForm()
     },
   })
 
-  const Label = styled.label`
-     {
-      font-size: 14px;
-      color: black;
-    }
-  `
-  const Form = styled.form`
-     {
-      display: flex;
-      flex-direction: column;
-    }
-  `
-  const Button = styled.button`
-     {
-      border: none;
-      background-color: transparent;
-      text-decoration: underline;
-      font-family: 'BM Jua', serif;
-      color: #152d68;
-    }
-  `
   return (
     <form onSubmit={formik.handleSubmit}>
       <label htmlFor="age">
@@ -86,7 +58,7 @@ const dispatch = useAppDispatch();
         <br />
         <input type="number" {...formik.getFieldProps('age')} />
         {formik.touched.age && formik.errors.age ? (
-            <div style={{ color: 'red' }}>{formik.errors.age}</div>
+          <div style={{ color: 'red' }}>{formik.errors.age}</div>
         ) : null}
       </label>
 
@@ -95,7 +67,7 @@ const dispatch = useAppDispatch();
         <br />
         <input type="text" {...formik.getFieldProps('city')} />
         {formik.touched.city && formik.errors.city ? (
-            <div style={{ color: 'red' }}>{formik.errors.city}</div>
+          <div style={{ color: 'red' }}>{formik.errors.city}</div>
         ) : null}
       </label>
 
@@ -104,7 +76,7 @@ const dispatch = useAppDispatch();
         <br />
         <input type="text" {...formik.getFieldProps('name')} />
         {formik.touched.name && formik.errors.name ? (
-            <div style={{ color: 'red' }}>{formik.errors.name}</div>
+          <div style={{ color: 'red' }}>{formik.errors.name}</div>
         ) : null}
       </label>
 
@@ -113,7 +85,7 @@ const dispatch = useAppDispatch();
         <br />
         <input type="text" {...formik.getFieldProps('someNote')} />
         {formik.touched.someNote && formik.errors.someNote ? (
-            <div style={{ color: 'red' }}>{formik.errors.someNote}</div>
+          <div style={{ color: 'red' }}>{formik.errors.someNote}</div>
         ) : null}
       </label>
 

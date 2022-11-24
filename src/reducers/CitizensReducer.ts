@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CitizenType, workersAPI } from '../api/workers-api'
-import {FormikValues} from "formik";
-import {FormikValuesType} from "../components/AddCitizen";
+import { FormikValues } from 'formik'
+import { FormikValuesType } from '../components/AddCitizen'
 
 type initialStateType = {
   data: CitizenType[]
@@ -33,16 +33,21 @@ export const fetchCitizenNote = createAsyncThunk(
 )
 
 export const addNewCitizen = createAsyncThunk(
-    'data/addNewCitizen',
-    async (values:FormikValuesType,{dispatch,rejectWithValue})=>{
-        try {
-            const res = await workersAPI.addCitizen(+values.age,values.city,values.name,values.someNote)
-            dispatch(fetchCitizens())
-            return res
-        }catch (e) {
-            rejectWithValue(e)
-        }
+  'data/addNewCitizen',
+  async (values: FormikValuesType, { dispatch, rejectWithValue }) => {
+    try {
+      const res = await workersAPI.addCitizen(
+        +values.age,
+        values.city,
+        values.name,
+        values.someNote
+      )
+      dispatch(fetchCitizens())
+      return res
+    } catch (e) {
+      rejectWithValue(e)
     }
+  }
 )
 
 const slice = createSlice({

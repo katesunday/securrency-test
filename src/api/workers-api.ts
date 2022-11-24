@@ -22,9 +22,11 @@ export type CitizenType = {
   city: string
   name: string
   someNote: string | null
+  index?: number
 }
 
 export const workersAPI = {
+  //for workers
   async getTest() {
     try {
       const res = await axios.get('http://localhost:8081/citizens')
@@ -34,6 +36,7 @@ export const workersAPI = {
       console.log(e)
     }
   },
+
   async loadCitizens() {
     try {
       const response: any = []
@@ -48,7 +51,7 @@ export const workersAPI = {
           return events.map((el: any) => response.push(el.returnValues))
         }
       )
-      response.map((el: any) => {
+      response.reverse().map((el: any) => {
         const obj = Object.assign(
           {},
           { name: el['name'] },
@@ -63,6 +66,7 @@ export const workersAPI = {
       console.log(e)
     }
   },
+
   async getNoteById(id: string) {
     try {
       return await contract.methods.getNoteByCitizenId(id).call()
