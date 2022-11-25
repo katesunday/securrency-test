@@ -22,7 +22,6 @@ export type CitizenType = {
   city: string
   name: string
   someNote: string | null
-  index?: number
 }
 
 export const workersAPI = {

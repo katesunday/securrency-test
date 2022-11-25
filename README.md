@@ -16,5 +16,3 @@ npm run start
 ###Usage
 Metamask should be installed and connected to Sepolia testnet.
 In order to write data you will need to get test ether.
-
-
